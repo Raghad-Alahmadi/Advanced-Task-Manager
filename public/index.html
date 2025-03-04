@@ -7,12 +7,14 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!--The Form-->
     <form id="task-form">
         <input type="text" id="task-input" placeholder="Enter task" >
         <button type="submit">Add Task</button>
         <p id="error-message" class="error-message"></p>
     </form>
-
+ 
+    <!-- Filter tasks -->
     <select id="filter">
         <option value="all">All</option>
         <option value="completed">Completed</option>
@@ -31,6 +33,6 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.1.2/redux.min.js"></script>
-    <script type="module" src="app.js"></script>
+    <script type="module" src="../src/app.js"></script>
 </body>
 </html>

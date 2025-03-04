@@ -3,22 +3,24 @@ import store from './store.js';
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Initial State:', store.getState()); // Log initial state
 
+    //Task 1: Fetch and Display Tasks Dynamically
     fetch('https://jsonplaceholder.typicode.com/todos?_limit=10')
         .then(response => response.json())
         .then(tasks => {
+            // Task 2: Store fetched tasks in Redux store
             store.dispatch({ type: 'SET_TASKS', payload: tasks });
             renderTasks(tasks);
         });
 
     const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    store.dispatch({ type: 'SET_TASKS', payload: savedTasks });
+    store.dispatch({ type: 'SET_TASKS', payload: savedTasks }); // Task 5: Persist Data with Local Storage
     renderTasks(savedTasks);
 });
 
 function renderTasks(tasks) {
     const taskList = document.getElementById('task-list');
     taskList.innerHTML = '';
-    tasks.forEach(task => {
+    tasks.forEach(task => { //Loop through tasks 
         const taskItem = document.createElement('div');
         taskItem.classList.add('task-item');
         taskItem.setAttribute('draggable', true);
@@ -63,6 +65,7 @@ function renderTasks(tasks) {
     });
 }
 
+// Task 3: Add New Task with Validation
 document.getElementById('task-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const taskInput = document.getElementById('task-input');
@@ -71,7 +74,7 @@ document.getElementById('task-form').addEventListener('submit', (e) => {
 
     if (task.length >= 5) {
         const newTask = { id: Date.now(), title: task, completed: false };
-        store.dispatch({ type: 'ADD_TASK', payload: newTask });
+        store.dispatch({ type: 'ADD_TASK', payload: newTask }); // Task 2: Allow adding tasks
         renderTasks(store.getState().tasks);
         taskInput.value = '';
         errorMessage.textContent = '';
@@ -82,6 +85,7 @@ document.getElementById('task-form').addEventListener('submit', (e) => {
     }
 });
 
+// Task 4: Filter Tasks Dynamically
 document.getElementById('filter').addEventListener('change', (e) => {
     const filter = e.target.value;
     const tasks = store.getState().tasks;
@@ -93,11 +97,13 @@ document.getElementById('filter').addEventListener('change', (e) => {
     renderTasks(filteredTasks);
 });
 
+// Task 5: Persist Data with Local Storage
 store.subscribe(() => {
     const tasks = store.getState().tasks;
     localStorage.setItem('tasks', JSON.stringify(tasks));
 });
 
+// Bonus Challenge: Implement Drag & Drop Sorting for tasks
 document.addEventListener('dragstart', (e) => {
     if (e.target.classList.contains('task-item')) {
         e.dataTransfer.setData('text/plain', e.target.dataset.id);
